@@ -1,5 +1,5 @@
 <p align="center">
-  <h1 align="center">11111111111111111111111Reason3D: Searching and Reasoning 3D Segmentation via Large Language Model [3DV 2025]
+  <h1 align="center">Reason3D: Searching and Reasoning 3D Segmentation via Large Language Model [3DV 2025]
   </h1>
   <p align="center">
     <a href="https://kuanchihhuang.github.io/"><strong>Kuan-Chih Huang</strong></a>,
@@ -16,7 +16,7 @@
 
 </div>
 
-## 🔥 Update11111
+## 🔥 Update
 - 2025/01/19:  Initial code for 3D referring segmentation has been released.
 - 2025/04/05:  Code and dataset for 3D reasoning segmentation has been released.
 - 2025/05/18:  We release the hierarchical searching code in the [search branch](https://github.com/KuanchihHuang/Reason3D/tree/search).
