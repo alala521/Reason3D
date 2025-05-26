@@ -31,7 +31,9 @@ from lavis.processors import *
 from lavis.runners import *
 from lavis.tasks import *
 
+os.environ["CUDA_VISIBLE_DEVICES"] = "0,1,2,5,6,7"
 
+# 后续导入TensorFlow/PyTorch等深度学习框架
 def parse_args():
     parser = argparse.ArgumentParser(description="Training")
 
