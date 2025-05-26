@@ -8,7 +8,6 @@
     <a href="https://yanshuicheng.info/"><strong>Shuicheng Yan</strong></a>,
     <a href="https://faculty.ucmerced.edu/mhyang/"><strong>Ming-Hsuan Yang</strong></a>
   </p>
-11
 <div align="center">
 
 [![arXiv](https://img.shields.io/badge/arXiv-2405.17427-red)](https://arxiv.org/abs/2405.17427)
