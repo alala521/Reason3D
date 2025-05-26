@@ -18,7 +18,7 @@
 This branch contains the hierarchical searching code of our Reason3D model.
 
 ## Overview
-111
+
 <img src="figs/reason3d_arch.jpg" alt="vis" style="zoom:50%;" />
 
 We introduce Reason3D, a novel LLM for comprehensive 3D understanding that processes point cloud data and text prompts to produce textual responses and segmentation masks. This enables advanced tasks such as 3D reasoning segmentation, hierarchical searching, referring expressions, and question answering with detailed mask outputs.
