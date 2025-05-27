@@ -231,7 +231,7 @@ class ThreeDReasonDataset(BaseDataset):
     
     def __getitem__(self, index: int) -> Tuple:
         data = self.annotation[index]
-        scan_id = data['scene_name']
+        scan_id = data['scene_id']
         ann_id = index
         
         scene = scan_id.split("_")[0]
