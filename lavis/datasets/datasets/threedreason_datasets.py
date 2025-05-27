@@ -90,6 +90,15 @@ class ThreeDReasonDataset(BaseDataset):
         for scene in scene_list:
             scene_files = scene_files + glob.glob(os.path.join(mp3d_pointcept, scene+"*"))
         return scene_files
+    
+    # def get_scannet_sp_filenames(self):
+    #     mp3d_root = os.path.join(self.pts_root, 'matterport')
+    #     scene_list = process_txt(os.path.join(mp3d_root,'scenes_'+self.prefix+'.txt'))
+    #     mp3d_pointcept = os.path.join(mp3d_root,'mp3d_data')
+    #     scene_files = []
+    #     for scene in scene_list:
+    #         scene_files = scene_files + glob.glob(os.path.join(mp3d_pointcept, scene+"*"))
+    #     return scene_files
         
     def load(self, filename):
         if self.with_label:
