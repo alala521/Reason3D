@@ -1,4 +1,5 @@
 checkpoints/
 data/reason3d/
 data/ScanRefer/
-lavis/output
+lavis/outputdata
+data/
