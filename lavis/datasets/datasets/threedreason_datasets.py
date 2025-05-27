@@ -58,7 +58,10 @@ class ThreeDReasonDataset(BaseDataset):
             self.training = False
         self.with_label = True
 
-        self.sp_filenames = self.get_mp3d_sp_filenames()        
+        self.sp_filenames_mp3d = self.get_mp3d_sp_filenames()  
+        self.sp_filenames_scannet = self.get_sp_filenames()        
+        self.sp_filenames = self.sp_filenames_mp3d + self.sp_filenames_scannet
+
 
         self.short_question_list = QUESTION_LIST
         self.answer_list = ANSWER_LIST
@@ -91,14 +94,12 @@ class ThreeDReasonDataset(BaseDataset):
             scene_files = scene_files + glob.glob(os.path.join(mp3d_pointcept, scene+"*"))
         return scene_files
     
-    # def get_scannet_sp_filenames(self):
-    #     mp3d_root = os.path.join(self.pts_root, 'matterport')
-    #     scene_list = process_txt(os.path.join(mp3d_root,'scenes_'+self.prefix+'.txt'))
-    #     mp3d_pointcept = os.path.join(mp3d_root,'mp3d_data')
-    #     scene_files = []
-    #     for scene in scene_list:
-    #         scene_files = scene_files + glob.glob(os.path.join(mp3d_pointcept, scene+"*"))
-    #     return scene_files
+
+    def get_sp_filenames(self):
+        filenames = glob.glob(osp.join(self.pts_root, 'scannetv2', self.prefix, '*' + '_reason.pth'))
+        assert len(filenames) > 0, 'Empty dataset.'
+        filenames = sorted(filenames)
+        return filenames
         
     def load(self, filename):
         if self.with_label:
