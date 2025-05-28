@@ -45,7 +45,7 @@ class Reason3DT5(BaseModel):
         self.mask_decoder = MaskDecoder(**mask_decoder_cfg)
         self.region_decoder = MaskDecoder(**mask_decoder_cfg)
         gorilla.load_checkpoint(self.encoder, point_encoder_cfg["pretrained"], strict=False, map_location='cpu')
-        
+
         self.pc_adapter = nn.Linear(point_encoder_cfg["media"], 1408)
         self.Qformer, self.query_tokens = self.init_Qformer(num_query_token, 1408)
         self.Qformer.cls = None
@@ -185,10 +185,11 @@ class Reason3DT5(BaseModel):
             seq_out = outputs["decoder_hidden_states"][-1]
             seg_token_index = targets == self.seg_token_idx
             loc_token_index = targets == self.loc_token_idx
-        
+
+            
             seg_out = seq_out[seg_token_index]
             loc_out = seq_out[loc_token_index]
-
+        
             seg_features = self.text_hidden_fcs[0](seg_out).unsqueeze(1)
             loc_features = self.loc_text_hidden_fcs[0](loc_out).unsqueeze(1)
             samples["text_features"] = seg_features

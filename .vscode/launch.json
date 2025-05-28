@@ -2,7 +2,7 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Python: -m torch.distributed.run --nproc_per_node=2 --master_port=29501 train.py --cfg-path lavis/projects/reason3d/train/reason3d_reason.yaml --options model.pretrained=/path/to/your/checkpoint.pth",
+            "name": "reason3d",
             "type": "python",
             "request": "launch",
             "program": "-m",
@@ -11,14 +11,30 @@
             "args": [
                 "torch.distributed.run",
                 "--nproc_per_node=1",
-                "--master_port=29501",
+                "--master_port=29503",
                 "train.py",
                 "--cfg-path",
-                "lavis/projects/reason3d/train/reason3d_reason.yaml",
-                // "--options",
-                // "model.pretrained=/path/to/your/checkpoint.pth"
+                "lavis/projects/reason3d/train/reason3d_reason.yaml"
             ],
             "cwd": "/data1/qsj/project/Reason3D"
-        }
+        },
+        {
+            "name": "res",
+            "type": "python",
+            "request": "launch",
+            "program": "-m",
+            "env": {},
+            "console": "integratedTerminal",
+            "args": [
+                "torch.distributed.run",
+                "--nproc_per_node=1",
+                "--master_port=29502",
+                "train.py",
+                "--cfg-path",
+                "lavis/projects/reason3d/train/reason3d_scanrefer_scratch.yaml"
+            ],
+            "cwd": "/data1/qsj/project/Reason3D"
+        },
+
     ]
 }

@@ -1,3 +1,8 @@
+import os
+os.environ["TOKENIZERS_PARALLELISM"] = "false"
+import warnings
+warnings.filterwarnings("ignore", category=FutureWarning)
+
 """
  Copyright (c) 2022, salesforce.com, inc.
  All rights reserved.
@@ -31,7 +36,7 @@ from lavis.processors import *
 from lavis.runners import *
 from lavis.tasks import *
 
-os.environ["CUDA_VISIBLE_DEVICES"] = "2,3,4,5,6,7"
+os.environ["CUDA_VISIBLE_DEVICES"] = "1"
 def parse_args():
     parser = argparse.ArgumentParser(description="Training")
 

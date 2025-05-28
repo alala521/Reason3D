@@ -24,6 +24,7 @@ import random
 from pathlib import Path
 import re
 from collections import defaultdict
+from collections import OrderedDict
 
 
 room_type_list = ["bathroom", "bedroom", "closet", "dining room", "entryway", "familyroom", "garage", "hallway", "library", "laundryroom", "kitchen", "living room", "conference room", "lounge", "office", "porch", "game", "stairs", "toilet", "utility room", "tv", "workout", "outdoor areas", "balcony", "other room", "bar", "classroom", "dining booth", "spa", "junk"]
@@ -340,23 +341,23 @@ class ThreeDReasonDataset(BaseDataset):
         
         answers = [random.choice(self.answer_list).format(location=room_target)]
 
-        return {
-            'ann_ids': ann_id,
-            'scan_ids': scan_id,
-            'coord': coord,
-            'coord_float': coord_float,
-            'feat': feat,
-            'superpoint': superpoint,
-            'object_id': object_id,
-            'gt_pmask': gt_pmask,
-            'gt_spmask': gt_spmask,
-            'sp_ref_mask': None,
-            'lang_tokens': None,
-            'answers': answers,
-            "text_input": caption_ori,
-            'room_mask': ~room_mask,
-            'room_sp_mask': ~room_sp_mask,
-        }
+        return OrderedDict([
+            ('ann_ids', ann_id),
+            ('scan_ids', scan_id),
+            ('coord', coord),
+            ('coord_float', coord_float),
+            ('feat', feat),
+            ('superpoint', superpoint),
+            ('object_id', object_id),
+            ('gt_pmask', gt_pmask),
+            ('gt_spmask', gt_spmask),
+            ('sp_ref_mask', None),
+            ('lang_tokens', None),
+            ('answers', answers),
+            ('text_input', caption_ori),
+            ('room_mask', ~room_mask),
+            ('room_sp_mask', ~room_sp_mask),
+        ])
 
     def collater(self, batch):
         ann_ids, scan_ids, coords, coords_float, feats, superpoints, object_ids, gt_pmasks, gt_spmasks, sp_ref_masks, lang_tokenss, lang_masks, lang_words, answerss, text_input_list, room_mask_list, room_sp_mask_list = [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], []
@@ -403,7 +404,7 @@ class ThreeDReasonDataset(BaseDataset):
         coords = torch.cat(coords, 0)  # long [B*N, 1 + 3], the batch item idx is put in b_xyz[:, 0]
         coords_float = torch.cat(coords_float, 0)  # float [B*N, 3]
         feats = torch.cat(feats, 0)  # float [B*N, 3]
-        superpoints = torch.cat(superpoints, 0).long()  # long [B*N, ]
+        superpoints = torch.cat(superpoints, 0).long()
         if self.use_xyz:
             feats = torch.cat((feats, coords_float), dim=1)
         # voxelize
