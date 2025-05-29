@@ -16,6 +16,7 @@ from lavis.models.reason3d_models.mask_decoder import MaskDecoder
 from lavis.models.reason3d_models.point_extractor import PointExtractor
 from lavis.models.reason3d_models.seg_loss import Criterion
 from lavis.common.utils import is_url
+from peft import get_peft_model, LoraConfig, TaskType, prepare_model_for_kbit_training
 
 
 @registry.register_model("reason3d_t5")
@@ -34,10 +35,20 @@ class Reason3DT5(BaseModel):
         point_encoder_cfg=None,
         mask_decoder_cfg=None,
         seg_criterion_cfg=None,
-        pred_confidence=0.5
+        pred_confidence=0.5,
+        use_lora=False,
+        lora_r=8,
+        lora_alpha=32,
+        lora_dropout=0.1,
+        lora_target_modules=["q", "v"]
     ):
         """
         apply_lemmatizer: when set to True, postprocess predict_seg() result with lemmas.
+        use_lora: whether to use LoRA for efficient fine-tuning
+        lora_r: LoRA attention dimension
+        lora_alpha: LoRA alpha parameter
+        lora_dropout: LoRA dropout probability
+        lora_target_modules: target modules to apply LoRA
         """
         super().__init__()
 
@@ -65,9 +76,26 @@ class Reason3DT5(BaseModel):
 
         self.t5_model.resize_token_embeddings(len(self.t5_tokenizer))
 
-        for name, param in self.t5_model.named_parameters():
-            param.requires_grad = False
-            param.data = param.data
+        # Apply LoRA if enabled
+        if use_lora:
+            peft_config = LoraConfig(
+                task_type=TaskType.SEQ_2_SEQ_LM,
+                inference_mode=False,
+                r=lora_r,
+                lora_alpha=lora_alpha,
+                lora_dropout=lora_dropout,
+                target_modules=lora_target_modules,
+                bias="none",
+                modules_to_save=["lm_head"],
+            )
+            self.t5_model = prepare_model_for_kbit_training(self.t5_model)
+            self.t5_model = get_peft_model(self.t5_model, peft_config)
+            
+
+        else:
+            for name, param in self.t5_model.named_parameters():
+                param.requires_grad = False
+
 
         self.t5_model.get_output_embeddings().requires_grad_(True)
         self.t5_model.get_input_embeddings().requires_grad_(True)
@@ -310,6 +338,11 @@ class Reason3DT5(BaseModel):
         t5_model = cfg.get("t5_model")
         prompt = cfg.get("prompt", "")
         apply_lemmatizer = cfg.get("apply_lemmatizer", False)
+        use_lora = cfg.get("use_lora", False)
+        lora_r = cfg.get("lora_r", 8)
+        lora_alpha = cfg.get("lora_alpha", 32)
+        lora_dropout = cfg.get("lora_dropout", 0.1)
+        lora_target_modules = cfg.get("lora_target_modules", ["q", "v"])
 
         model = cls(
             num_query_token=num_query_token,
@@ -319,7 +352,12 @@ class Reason3DT5(BaseModel):
             point_encoder_cfg=point_encoder_cfg,
             mask_decoder_cfg=mask_decoder_cfg,
             seg_criterion_cfg=seg_criterion_cfg,
-            pred_confidence=pred_confidence
+            pred_confidence=pred_confidence,
+            use_lora=use_lora,
+            lora_r=lora_r,
+            lora_alpha=lora_alpha,
+            lora_dropout=lora_dropout,
+            lora_target_modules=lora_target_modules
         )
         model.load_checkpoint_from_config(cfg)
 

@@ -28,6 +28,14 @@ model:
     loss_fun: 'focal'
   pred_confidence: 0.5
 
+  use_lora: true
+  lora_r: 8
+  lora_alpha: 32
+  lora_dropout: 0.1
+  lora_target_modules: ["q", "v", "k", "o", "wi", "wo"]
+  bias: "none"  # 添加bias配置
+  modules_to_save: ["lm_head"]  # 添加需要保存的模块
+
 datasets:
   3d_refer: # name of the dataset builder
     text_processor:
@@ -49,16 +57,17 @@ run:
   task: 3d_refer_seg
   # optimizer
   lr_sched: "linear_warmup_cosine_lr"
-  init_lr: 1e-4
+  # init_lr: 1e-4
+  init_lr: 5e-5
   min_lr: 1e-5
   warmup_lr: 1e-8
   warmup_steps: 1000
   weight_decay: 0.05
   max_epoch: 100
-  batch_size_train: 8
+  batch_size_train: 4
   batch_size_eval: 1
   num_workers: 4
-  accum_grad_iters: 1
+  accum_grad_iters: 2
 
   max_len: 60
   min_len: 1
