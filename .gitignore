@@ -1,6 +1,19 @@
+# Ignore all data directories
 data/
-checkpoints/
+data/*
 data/reason3d/
 data/ScanRefer/
+checkpoints/
 lavis/output
+
+# Ignore specific data file types
+*.pkl
+*.npy
+*.npz
+*.h5
+*.hdf5
+*.pt
+*.pth
+*.ckpt
+*.bin
 
