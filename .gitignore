@@ -3,8 +3,12 @@ data/
 data/*
 data/reason3d/
 data/ScanRefer/
+
+# Ignore checkpoints and output directories
 checkpoints/
-lavis/output
+lavis/output/
+**/output/
+**/checkpoints/
 
 # Ignore specific data file types
 *.pkl
@@ -16,4 +20,9 @@ lavis/output
 *.pth
 *.ckpt
 *.bin
+
+# Ignore Python cache files
+__pycache__/
+*.py[cod]
+*$py.class
 
